@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>AI Risk Vulnerability Matrix - Complete</title>
+    <style>
+        body {
+            font-family: 'Figtree', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+        
+        .matrix-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 1800px;
+            margin: 0 auto;
+            overflow-x: auto;
+            overflow-y: auto;
+            width: 100%;
+        }
+        
+        .header {
+            background: #a31e38;
+            color: white;
+            padding: 15px 20px;
+            margin: 0;
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+        }
+
+        /* Risk and Sector Controls */
+        .controls {
+            background: #e8e8e8;
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .dropdown-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-right: 10px;
+        }
+
+        .dropdown-button {
+            background: white;
+            border: 2px solid #666;
+            border-radius: 6px;
+            padding: 8px 15px;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 200px;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-button:hover {
+            border-color: #a31e38;
+            background-color: #fafafa;
+        }
+
+        .dropdown-arrow {
+            border: solid #666;
+            border-width: 0 2px 2px 0;
+            display: inline-block;
+            padding: 3px;
+            transform: rotate(45deg);
+            transition: transform 0.2s ease;
+            margin-left: auto;
+        }
+
+        .dropdown-button.open .dropdown-arrow {
+            transform: rotate(-135deg);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 100%;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+            top: 100%;
+            left: 0;
+        }
+
+        .dropdown-content.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.1s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f8f8;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-checkbox {
+            width: 14px;
+            height: 14px;
+            cursor: pointer;
+        }
+
+        .item-code {
+            font-weight: 600;
+            color: #a31e38;
+            min-width: 30px;
+        }
+
+        .item-title {
+            flex: 1;
+            color: #333;
+            line-height: 1.3;
+        }
+        
+        .legend {
+            background: #f8f8f8;
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .legend-items {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+        }
+        
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 2px;
+            border: 1px solid #333;
+        }
+        
+        .legend-color.not-vulnerable { background-color: #0571b0; }
+        .legend-color.minimal-vulnerability { background-color: #92c5de; }
+        .legend-color.somewhat-vulnerable { background-color: #f7f7f7; }
+        .legend-color.highly-vulnerable { background-color: #f4a582; }
+        .legend-color.critical-concern { background-color: #ca0020; }
+        
+        .legend-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+
+        .legend-consensus {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        .consensus-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .consensus-dot.consensus-high { background-color: #2e7d32; }
+        .consensus-dot.consensus-medium { background-color: #f57c00; }
+        .consensus-dot.consensus-low { background-color: #d32f2f; }
+        
+        /* Hidden styles */
+        .hidden-row {
+            display: none !important;
+        }
+        
+        .hidden-col {
+            display: none !important;
+        }
+        
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            min-width: 1700px;
+        }
+        
+        .matrix-table th,
+        .matrix-table td {
+            border: 1.5px solid #000;
+            padding: 6px;
+            text-align: center;
+            vertical-align: middle;
+            height: 45px;
+            position: relative;
+        }
+
+        .matrix-table th:first-child,
+        .matrix-table td:first-child {
+            width: 320px;
+            text-align: left;
+            padding: 10px 12px;
+            font-size: 10px;
+        }
+        
+        .sector-header {
+            background: #4a4a4a;
+            color: white;
+            font-weight: 600;
+            font-size: 10px;
+            line-height: 1.2;
+            word-wrap: break-word;
+            width: 90px;
+        }
+        
+        .risk-item-label {
+            background: #4a4a4a;
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .category-header {
+            background: #666;
+            color: white;
+            font-weight: 700;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        /* Vulnerability cell styles */
+        .not-vulnerable { background-color: #0571b0; color: white; }
+        .minimal-vulnerability { background-color: #92c5de; color: black; }
+        .somewhat-vulnerable { background-color: #f7f7f7; color: black; }
+        .highly-vulnerable { background-color: #f4a582; color: black; }
+        .critical-concern { background-color: #ca0020; color: white; }
+
+        /* Mini bar chart styles */
+        .mini-chart {
+            display: flex;
+            height: 5px;
+            width: 55px;
+            margin: 4px auto 2px;
+            border-radius: 1px;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            background-color: white !important;
+            border: 1px solid #ddd;
+        }
+
+        .mini-bar {
+            height: 100%;
+            flex-shrink: 0;
+        }
+
+        .mini-bar.not-vulnerable { background-color: #0571b0; }
+        .mini-bar.minimal-vulnerability { background-color: #92c5de; }
+        .mini-bar.somewhat-vulnerable { background-color: #f7f7f7; }
+        .mini-bar.highly-vulnerable { background-color: #f4a582; }
+        .mini-bar.critical-concern { background-color: #ca0020; }
+
+        /* Cell consensus dot positioning */
+        .cell-consensus-dot {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .cell-consensus-dot.consensus-high { background-color: #2e7d32; }
+        .cell-consensus-dot.consensus-medium { background-color: #f57c00; }
+        .cell-consensus-dot.consensus-low { background-color: #d32f2f; }
+
+        /* Clickable cell styles */
+        .clickable-cell {
+            cursor: pointer;
+            transition: transform 0.1s ease, box-shadow 0.2s ease;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .clickable-cell:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        /* Modal styles */
+        #detailModal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        #detailModal.show {
+            display: block;
+        }
+
+        .modal-content {
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            margin: 5% auto;
+            padding: 0;
+            border: none;
+            width: 90%;
+            max-width: 900px;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+            border-radius: 8px;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 24px 30px 28px;
+            position: relative;
+            background-color: #a31e38;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 0 12px 0;
+            line-height: 1.3;
+        }
+
+        .modal-subtitle {
+            font-size: 18px;
+            color: #fff;
+            margin: 0;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            color: #bbb;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+        }
+
+        .close:hover {
+            color: #fff;
+        }
+
+        .modal-body {
+            padding: 0;
+            background-color: #1a1a1a;
+        }
+
+        .expert-responses {
+            padding: 25px 30px;
+            background-color: #ffffff;
+            margin: 10px 20px 20px 20px;
+            border-radius: 8px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 0 0 8px 0;
+            border: none;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-container">
+        <div class="header">
+            <svg class="brand-logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" zoomAndPan="magnify" viewBox="0 0 187.5 74.999997" height="40" preserveAspectRatio="xMidYMid meet" version="1.0">
+                <defs><g/><clipPath id="cfb6ab39f1"><path d="M 0 0.101562 L 187 0.101562 L 187 74.898438 L 0 74.898438 Z M 0 0.101562 " clip-rule="nonzero"/></clipPath><clipPath id="8d4caab960"><path d="M 6 0.101562 L 186 0.101562 L 186 74.898438 L 6 74.898438 Z M 6 0.101562 " clip-rule="nonzero"/></clipPath><clipPath id="ce2c3b5193"><path d="M 67 11 L 70 11 L 70 74.898438 L 67 74.898438 Z M 67 11 " clip-rule="nonzero"/></clipPath><clipPath id="1130985f4e"><path d="M 75 22 L 179.984375 22 L 179.984375 67 L 75 67 Z M 75 22 " clip-rule="nonzero"/></clipPath><clipPath id="7c0e0aede0"><rect x="0" width="105" y="0" height="45"/></clipPath><clipPath id="28b61d26e9"><path d="M 0.222656 0.148438 L 41 0.148438 L 41 74.804688 L 0.222656 74.804688 Z M 0.222656 0.148438 " clip-rule="nonzero"/></clipPath><clipPath id="fe5d0027e4"><rect x="0" width="180" y="0" height="75"/></clipPath></defs><g clip-path="url(#cfb6ab39f1)"><path fill="#ffffff" d="M 0 0.101562 L 187 0.101562 L 187 74.898438 L 0 74.898438 Z M 0 0.101562 " fill-opacity="1" fill-rule="nonzero"/><path fill="#a32035" d="M 0 0.101562 L 187 0.101562 L 187 74.898438 L 0 74.898438 Z M 0 0.101562 " fill-opacity="1" fill-rule="nonzero"/></g><g clip-path="url(#8d4caab960)"><g transform="matrix(1, 0, 0, 1, 6, -0.000000000000008674)"><g clip-path="url(#fe5d0027e4)"><g clip-path="url(#ce2c3b5193)"><path stroke-linecap="butt" transform="matrix(0, -0.106044, 0.106044, 0, 67.918189, 74.851107)" fill="none" stroke-linejoin="miter" d="M -0.00429141 7.512467 L 592.208033 7.512467 " stroke="#ffffff" stroke-width="15" stroke-opacity="1" stroke-miterlimit="4"/></g><g clip-path="url(#1130985f4e)"><g transform="matrix(1, 0, 0, 1, 75, 22)"><g clip-path="url(#7c0e0aede0)"><g fill="#ffffff" fill-opacity="1"><g transform="translate(1.088482, 18.877849)"><g><path d="M 3.96875 -13.875 L 8.515625 -2.546875 L 13.046875 -13.875 L 15.421875 -13.875 L 15.421875 0 L 13.59375 0 L 13.59375 -5.40625 L 13.765625 -11.234375 L 9.203125 0 L 7.796875 0 L 3.265625 -11.203125 L 3.4375 -5.40625 L 3.4375 0 L 1.609375 0 L 1.609375 -13.875 Z M 3.96875 -13.875 "/></g></g></g><g fill="#ffffff" fill-opacity="1"><g transform="translate(18.122912, 18.877849)"><g><path d="M 3.578125 0 L 1.75 0 L 1.75 -13.875 L 3.578125 -13.875 Z M 3.578125 0 "/></g></g></g><g fill="#ffffff" fill-opacity="1"><g transform="translate(23.429503, 18.877849)"><g><path d="M 11.203125 -12.375 L 6.734375 -12.375 L 6.734375 0 L 4.921875 0 L 4.921875 -12.375 L 0.46875 -12.375 L 0.46875 -13.875 L 11.203125 -13.875 Z M 11.203125 -12.375 "/></g></g></g><g fill="#ffffff" fill-opacity="1"><g transform="translate(35.071602, 18.877849)"><g/></g></g><g fill="#ffffff" fill-opacity="1"><g transform="translate(39.901839, 18.877849)"><g><path d="M 9.265625 -3.625 L 3.453125 -3.625 L 2.15625 0 L 0.265625 0 L 5.5625 -13.875 L 7.171875 -13.875 L 12.46875 0 L 10.59375 0 Z M 4.015625 -5.125 L 8.734375 -5.125 L 6.359375 -11.609375 Z M 4.015625 -5.125 "/></g></g></g><g fill="#ffffff" fill-opacity="1"><g transform="translate(52.630026, 18.877849)"><g><path d="M 3.578125 0 L 1.75 0 L 1.75 -13.875 L 3.578125 -13.875 Z M 3.578125 0 "/></g></g></g><g fill="#ffffff" fill-opacity="1"><g transform="translate(57.936617, 18.877849)"><g/></g></g><g fill="#ffffff" fill-opacity="1"><g transform="translate(62.766854, 18.877849)"><g><path d="M 6.703125 -5.609375 L 3.4375 -5.609375 L 3.4375 0 L 1.59375 0 L 1.59375 -13.875 L 6.1875 -13.875 C 7.75 -13.875 8.953125 -13.515625 9.796875 -12.796875 C 10.640625 -12.085938 11.0625 -11.054688 11.0625 -9.703125 C 11.0625 -8.835938 10.828125 -8.082031 10.359375 -7.4375 C 9.890625 -6.800781 9.242188 -6.320312 8.421875 -6 L 11.671875 -0.109375 L 11.671875 0 L 9.703125 0 Z M 3.4375 -7.109375 L 6.25 -7.109375 C 7.15625 -7.109375 7.875 -7.34375 8.40625 -7.8125 C 8.945312 -8.28125 9.21875 -8.910156 9.21875 -9.703125 C 9.21875 -10.554688 8.960938 -11.210938 8.453125 -11.671875 C 7.941406 -12.128906 7.203125 -12.363281 6.234375 -12.375 L 3.4375 -12.375 Z M 3.4375 -7.109375 "/></g></g></g><g fill="#ffffff" fill-opacity="1"><g transform="translate(74.780514, 18.877849)"><g><path d="M 3.25 0 L 1.484375 0 L 1.484375 -10.3125 L 3.25 -10.3125 Z M 1.34375 -13.046875 C 1.34375 -13.328125 1.429688 -13.566406 1.609375 -13.765625 C 1.785156 -13.960938 2.039062 -14.0625 2.375 -14.0625 C 2.71875 -14.0625 2.976562 -13.960938 3.15625 -13.765625 C 3.34375 -13.566406 3.4375 -13.320312 3.4375 -13.03125 C 3.4375 -12.75 3.34375 -12.515625 3.15625 -12.328125 C 2.976562 -12.140625 2.71875 -12.046875 2.375 -12.046875 C 2.039062 -12.046875 1.785156 -12.140625 1.609375 -12.328125 C 1.429688 -12.515625 1.34375 -12.753906 1.34375 -13.046875 Z M 1.34375 -13.046875 "/></g></g></g><g fill="#ffffff" fill-opacity="1"><g transform="translate(79.51548, 18.877849)"><g><path d="M 7.34375 -2.734375 C 7.34375 -3.210938 7.160156 -3.582031 6.796875 -3.84375 C 6.441406 -4.101562 5.816406 -4.328125 4.921875 -4.515625 C 4.023438 -4.710938 3.316406 -4.941406 2.796875 -5.203125 C 2.273438 -5.472656 1.890625 -5.789062 1.640625 -6.15625 C 1.390625 -6.53125 1.265625 -6.972656 1.265625 -7.484375 C 1.265625 -8.328125 1.617188 -9.039062 2.328125 -9.625 C 3.046875 -10.207031 3.957031 -10.5 5.0625 -10.5 C 6.238281 -10.5 7.1875 -10.195312 7.90625 -9.59375 C 8.632812 -8.988281 9 -8.21875 9 -7.28125 L 7.234375 -7.28125 C 7.234375 -7.757812 7.023438 -8.171875 6.609375 -8.515625 C 6.203125 -8.867188 5.6875 -9.046875 5.0625 -9.046875 C 4.425781 -9.046875 3.925781 -8.90625 3.5625 -8.625 C 3.195312 -8.351562 3.015625 -7.988281 3.015625 -7.53125 C 3.015625 -7.113281 3.179688 -6.796875 3.515625 -6.578125 C 3.859375 -6.359375 4.46875 -6.148438 5.34375 -5.953125 C 6.226562 -5.753906 6.941406 -5.519531 7.484375 -5.25 C 8.035156 -4.976562 8.441406 -4.648438 8.703125 -4.265625 C 8.960938 -3.878906 9.09375 -3.410156 9.09375 -2.859375 C 9.09375 -1.941406 8.722656 -1.203125 7.984375 -0.640625 C 7.253906 -0.0859375 6.300781 0.1875 5.125 0.1875 C 4.300781 0.1875 3.570312 0.0390625 2.9375 -0.25 C 2.300781 -0.539062 1.800781 -0.945312 1.4375 -1.46875 C 1.082031 -2 0.90625 -2.566406 0.90625 -3.171875 L 2.671875 -3.171875 C 2.703125 -2.578125 2.9375 -2.109375 3.375 -1.765625 C 3.820312 -1.421875 4.40625 -1.25 5.125 -1.25 C 5.789062 -1.25 6.328125 -1.382812 6.734375 -1.65625 C 7.140625 -1.925781 7.34375 -2.285156 7.34375 -2.734375 Z M 7.34375 -2.734375 "/></g></g></g><g fill="#ffffff" fill-opacity="1"><g transform="translate(89.576083, 18.877849)"><g><path d="M 4.21875 -4.78125 L 3.109375 -3.625 L 3.109375 0 L 1.34375 0 L 1.34375 -14.640625 L 3.109375 -14.640625 L 3.109375 -5.78125 L 4.046875 -6.921875 L 7.265625 -10.3125 L 9.40625 -10.3125 L 5.390625 -6 L 9.875 0 L 7.796875 0 Z M 4.21875 -4.78125 "/></g></g></g><g fill="#ffffff" fill-opacity="1"><g transform="translate(99.472118, 18.877849)"><g/></g></g><g fill="#ffffff" fill-opacity="1"><g transform="translate(1.088482, 38.773824)"><g><path d="M 4.28125 0 L 1.421875 0 L 1.421875 -13.875 L 4.28125 -13.875 Z M 4.28125 0 "/></g></g></g><g fill="#ffffff" fill-opacity="1"><g transform="translate(6.776156, 38.773824)"><g><path d="M 3.59375 -10.3125 L 3.671875 -9.125 C 4.410156 -10.039062 5.398438 -10.5 6.640625 -10.5 C 7.734375 -10.5 8.546875 -10.175781 9.078125 -9.53125 C 9.609375 -8.894531 9.882812 -7.9375 9.90625 -6.65625 L 9.90625 0 L 7.140625 0 L 7.140625 -6.59375 C 7.140625 -7.175781 7.015625 -7.597656 6.765625 -7.859375 C 6.515625 -8.128906 6.09375 -8.265625 5.5 -8.265625 C 4.71875 -8.265625 4.132812 -7.929688 3.75 -7.265625 L 3.75 0 L 1 0 L 1 -10.3125 Z M 3.59375 -10.3125 "/></g></g></g><g fill="#ffffff" fill-opacity="1"><g transform="translate(17.703728, 38.773824)"><g><path d="M 0.625 -5.234375 C 0.625 -6.835938 0.984375 -8.113281 1.703125 -9.0625 C 2.429688 -10.019531 3.421875 -10.5 4.671875 -10.5 C 5.671875 -10.5 6.5 -10.125 7.15625 -9.375 L 7.15625 -14.640625 L 9.921875 -14.640625 L 9.921875 0 L 7.4375 0 L 7.296875 -1.09375 C 6.609375 -0.238281 5.726562 0.1875 4.65625 0.1875 C 3.4375 0.1875 2.457031 -0.285156 1.71875 -1.234375 C 0.988281 -2.191406 0.625 -3.523438 0.625 -5.234375 Z M 3.390625 -5.03125 C 3.390625 -4.0625 3.554688 -3.320312 3.890625 -2.8125 C 4.222656 -2.300781 4.710938 -2.046875 5.359375 -2.046875 C 6.203125 -2.046875 6.800781 -2.398438 7.15625 -3.109375 L 7.15625 -7.1875 C 6.8125 -7.90625 6.21875 -8.265625 5.375 -8.265625 C 4.050781 -8.265625 3.390625 -7.1875 3.390625 -5.03125 Z M 3.390625 -5.03125 "/></g></g></g><g fill="#ffffff" fill-opacity="1"><g transform="translate(28.697986, 38.773824)"><g><path d="M 5.796875 0.1875 C 4.285156 0.1875 3.054688 -0.273438 2.109375 -1.203125 C 1.160156 -2.128906 0.6875 -3.363281 0.6875 -4.90625 L 0.6875 -5.171875 C 0.6875 -6.210938 0.882812 -7.140625 1.28125 -7.953125 C 1.6875 -8.765625 2.253906 -9.390625 2.984375 -9.828125 C 3.722656 -10.273438 4.5625 -10.5 5.5 -10.5 C 6.90625 -10.5 8.015625 -10.050781 8.828125 -9.15625 C 9.640625 -8.269531 10.046875 -7.015625 10.046875 -5.390625 L 10.046875 -4.265625 L 3.484375 -4.265625 C 3.566406 -3.585938 3.832031 -3.046875 4.28125 -2.640625 C 4.726562 -2.234375 5.296875 -2.03125 5.984375 -2.03125 C 7.046875 -2.03125 7.875 -2.414062 8.46875 -3.1875 L 9.828125 -1.671875 C 9.410156 -1.085938 8.847656 -0.628906 8.140625 -0.296875 C 7.441406 0.0234375 6.660156 0.1875 5.796875 0.1875 Z M 5.484375 -8.265625 C 4.941406 -8.265625 4.5 -8.082031 4.15625 -7.71875 C 3.820312 -7.351562 3.601562 -6.828125 3.5 -6.140625 L 7.34375 -6.140625 L 7.34375 -6.359375 C 7.320312 -6.960938 7.148438 -7.429688 6.828125 -7.765625 C 6.515625 -8.097656 6.066406 -8.265625 5.484375 -8.265625 Z M 5.484375 -8.265625 "/></g></g></g><g fill="#ffffff" fill-opacity="1"><g transform="translate(39.244474, 38.773824)"><g><path d="M 4.984375 -7.234375 L 6.71875 -10.3125 L 9.65625 -10.3125 L 6.734375 -5.265625 L 9.78125 0 L 6.828125 0 L 5 -3.234375 L 3.15625 0 L 0.203125 0 L 3.265625 -5.265625 L 0.328125 -10.3125 L 3.28125 -10.3125 Z M 4.984375 -7.234375 "/></g></g></g></g></g></g><path fill="#ffffff" d="M 42.148438 70.992188 C 42.304688 71.320312 42.535156 71.585938 42.84375 71.78125 C 43.152344 71.976562 43.488281 72.074219 43.855469 72.074219 C 44.132812 72.074219 44.398438 72.011719 44.648438 71.894531 C 46.023438 71.25 47.34375 70.511719 48.613281 69.675781 C 49.882812 68.839844 51.082031 67.914062 52.210938 66.902344 C 53.34375 65.890625 54.394531 64.800781 55.367188 63.632812 C 56.339844 62.464844 57.21875 61.234375 58.011719 59.9375 C 58.800781 58.640625 59.492188 57.292969 60.085938 55.894531 C 60.679688 54.496094 61.164062 53.058594 61.546875 51.589844 C 61.929688 50.121094 62.199219 48.628906 62.363281 47.121094 C 62.523438 45.609375 62.574219 44.097656 62.515625 42.578125 C 62.457031 41.0625 62.285156 39.554688 62.003906 38.0625 C 61.722656 36.570312 61.332031 35.105469 60.835938 33.671875 C 60.339844 32.238281 59.742188 30.84375 59.039062 29.496094 C 58.339844 28.152344 57.542969 26.863281 56.652344 25.632812 C 55.761719 24.402344 54.785156 23.242188 53.726562 22.15625 C 52.664062 21.070312 51.527344 20.066406 50.320312 19.144531 C 49.113281 18.226562 47.84375 17.398438 46.511719 16.667969 C 45.183594 15.933594 43.804688 15.300781 42.382812 14.769531 C 42.152344 14.683594 41.910156 14.644531 41.660156 14.652344 C 41.414062 14.660156 41.175781 14.714844 40.949219 14.820312 C 40.722656 14.921875 40.523438 15.0625 40.355469 15.246094 C 40.183594 15.425781 40.054688 15.632812 39.96875 15.867188 C 39.882812 16.101562 39.839844 16.339844 39.851562 16.589844 C 39.859375 16.835938 39.914062 17.074219 40.015625 17.300781 C 40.121094 17.527344 40.261719 17.726562 40.441406 17.894531 C 40.625 18.066406 40.832031 18.195312 41.0625 18.28125 C 42.253906 18.726562 43.410156 19.253906 44.527344 19.859375 C 45.644531 20.464844 46.714844 21.144531 47.738281 21.902344 C 48.757812 22.65625 49.722656 23.480469 50.628906 24.371094 C 51.539062 25.261719 52.378906 26.210938 53.152344 27.21875 C 53.925781 28.226562 54.625 29.285156 55.25 30.394531 C 55.875 31.5 56.421875 32.644531 56.886719 33.828125 C 57.351562 35.011719 57.734375 36.21875 58.03125 37.457031 C 58.324219 38.691406 58.535156 39.941406 58.652344 41.207031 C 58.773438 42.472656 58.808594 43.742188 58.75 45.011719 C 58.691406 46.28125 58.546875 47.542969 58.316406 48.792969 C 58.082031 50.042969 57.761719 51.269531 57.355469 52.472656 C 56.953125 53.679688 56.464844 54.847656 55.894531 55.984375 C 55.328125 57.121094 54.679688 58.214844 53.957031 59.261719 C 53.238281 60.304688 52.445312 61.296875 51.585938 62.234375 C 50.722656 63.167969 49.800781 64.039062 48.820312 64.84375 C 47.835938 65.652344 46.800781 66.386719 45.714844 67.046875 L 45.714844 50.46875 L 52.867188 50.46875 L 43.839844 39.011719 L 34.816406 50.46875 L 41.96875 50.46875 L 41.96875 70.183594 C 41.964844 70.46875 42.023438 70.734375 42.148438 70.992188 Z M 42.148438 70.992188 " fill-opacity="1" fill-rule="nonzero"/><g clip-path="url(#28b61d26e9)"><path fill="#ffffff" d="M 4.324219 43.804688 C 4.324219 42.472656 4.417969 41.144531 4.613281 39.828125 C 4.808594 38.507812 5.097656 37.210938 5.480469 35.9375 C 5.863281 34.660156 6.339844 33.417969 6.90625 32.214844 C 7.472656 31.007812 8.125 29.851562 8.863281 28.738281 C 9.601562 27.628906 10.414062 26.578125 11.304688 25.589844 C 12.199219 24.597656 13.15625 23.679688 14.183594 22.832031 C 15.210938 21.980469 16.292969 21.210938 17.433594 20.523438 C 18.574219 19.832031 19.757812 19.230469 20.988281 18.714844 C 21.234375 18.628906 21.453125 18.5 21.644531 18.324219 C 21.835938 18.148438 21.984375 17.941406 22.09375 17.703125 C 22.199219 17.46875 22.253906 17.21875 22.253906 16.957031 C 22.257812 16.699219 22.207031 16.449219 22.105469 16.207031 C 22.003906 15.96875 21.859375 15.757812 21.671875 15.582031 C 21.484375 15.402344 21.265625 15.265625 21.023438 15.179688 C 20.777344 15.089844 20.527344 15.050781 20.265625 15.066406 C 20.007812 15.085938 19.761719 15.152344 19.527344 15.269531 C 18.714844 15.613281 17.914062 15.992188 17.132812 16.40625 C 16.347656 16.820312 15.585938 17.265625 14.839844 17.742188 C 14.097656 18.222656 13.375 18.730469 12.671875 19.269531 C 11.972656 19.8125 11.296875 20.378906 10.644531 20.980469 C 9.992188 21.578125 9.367188 22.203125 8.769531 22.855469 C 8.171875 23.503906 7.601562 24.183594 7.0625 24.882812 C 6.519531 25.582031 6.011719 26.304688 5.53125 27.050781 C 5.054688 27.792969 4.609375 28.558594 4.195312 29.339844 C 3.78125 30.121094 3.402344 30.921875 3.058594 31.734375 C 2.714844 32.550781 2.402344 33.378906 2.128906 34.222656 C 1.855469 35.0625 1.617188 35.914062 1.417969 36.777344 C 1.21875 37.636719 1.054688 38.507812 0.925781 39.382812 C 0.800781 40.257812 0.710938 41.136719 0.660156 42.019531 C 0.609375 42.90625 0.597656 43.789062 0.621094 44.671875 C 0.648438 45.558594 0.710938 46.441406 0.8125 47.320312 C 0.910156 48.199219 1.050781 49.070312 1.222656 49.9375 C 1.398438 50.804688 1.613281 51.664062 1.859375 52.511719 C 2.109375 53.363281 2.394531 54.199219 2.714844 55.023438 C 3.035156 55.847656 3.390625 56.660156 3.78125 57.453125 C 4.167969 58.246094 4.59375 59.023438 5.050781 59.78125 C 5.507812 60.539062 5.992188 61.277344 6.511719 61.992188 C 7.03125 62.710938 7.582031 63.402344 8.160156 64.070312 C 8.742188 64.742188 9.347656 65.382812 9.980469 66 C 10.613281 66.617188 11.273438 67.207031 11.957031 67.769531 C 12.644531 68.328125 13.351562 68.859375 14.082031 69.359375 C 14.8125 69.859375 15.5625 70.328125 16.332031 70.761719 C 17.101562 71.199219 17.886719 71.601562 18.691406 71.96875 C 19.496094 72.335938 20.316406 72.671875 21.148438 72.96875 C 21.984375 73.265625 22.828125 73.53125 23.683594 73.753906 C 24.539062 73.980469 25.402344 74.167969 26.273438 74.320312 C 27.144531 74.472656 28.023438 74.585938 28.902344 74.664062 C 29.785156 74.742188 30.667969 74.78125 31.554688 74.78125 C 31.800781 74.78125 32.039062 74.734375 32.265625 74.640625 C 32.496094 74.546875 32.699219 74.410156 32.875 74.238281 C 33.050781 74.0625 33.183594 73.863281 33.28125 73.632812 C 33.375 73.40625 33.425781 73.167969 33.425781 72.921875 L 33.425781 11.546875 L 40.578125 11.546875 L 31.554688 0.09375 L 22.527344 11.546875 L 29.679688 11.546875 L 29.679688 70.949219 C 26.488281 70.734375 23.433594 69.972656 20.515625 68.671875 L 20.515625 40 L 27.664062 40 L 18.640625 28.542969 L 9.601562 40 L 16.75 40 L 16.75 66.628906 C 14.847656 65.398438 13.121094 63.949219 11.578125 62.285156 C 10.035156 60.621094 8.71875 58.789062 7.636719 56.796875 C 6.550781 54.804688 5.726562 52.707031 5.167969 50.507812 C 4.605469 48.308594 4.324219 46.074219 4.324219 43.804688 Z M 4.324219 43.804688 " fill-opacity="1" fill-rule="nonzero"/></g>
+            </svg>
+            <h1>AI Risk Sector Vulnerability Matrix - 24 Risk Assessment</h1>
+        </div>
+
+        <!-- Risk and Sector Controls -->
+        <div class="controls">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="dropdown-label">Show/Hide Risks:</span>
+                <div class="dropdown-container">
+                    <div class="dropdown-button" id="riskDropdownButton">
+                        <span id="riskDropdownText">All Risks Visible</span>
+                        <div class="dropdown-arrow"></div>
+                    </div>
+                    <div class="dropdown-content" id="riskDropdownContent">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="dropdown-label">Show/Hide Sectors:</span>
+                <div class="dropdown-container">
+                    <div class="dropdown-button" id="sectorDropdownButton">
+                        <span id="sectorDropdownText">All Sectors Visible</span>
+                        <div class="dropdown-arrow"></div>
+                    </div>
+                    <div class="dropdown-content" id="sectorDropdownContent">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="legend">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div style="padding-right: 30px;">
+                    <div style="font-size: 12px; font-weight: 600; color: #333; margin-bottom: 10px;">Display Options:</div>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #555; cursor: pointer;">
+                            <input type="checkbox" id="showDistributions" checked style="cursor: pointer;">
+                            <span>Show Response Distributions</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #555; cursor: pointer;">
+                            <input type="checkbox" id="showConsensus" checked style="cursor: pointer;">
+                            <span>Show Consensus Indicators</span>
+                        </label>
+                    </div>
+                    
+                    <div style="font-size: 12px; font-weight: 600; color: #333; margin-bottom: 8px; margin-top: 15px;">Evidence Quality Filter:</div>
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #555; cursor: pointer;">
+                            <input type="checkbox" class="evidenceFilter" value="poor" checked style="cursor: pointer;">
+                            <span>Poor (n < 10)</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #555; cursor: pointer;">
+                            <input type="checkbox" class="evidenceFilter" value="moderate" checked style="cursor: pointer;">
+                            <span>Moderate (10 ≤ n < 20)</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #555; cursor: pointer;">
+                            <input type="checkbox" class="evidenceFilter" value="good" checked style="cursor: pointer;">
+                            <span>Good (n ≥ 20)</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div style="flex: 1;">
+                    <div class="legend-title">Vulnerability Levels:</div>
+                    <div class="legend-items">
+                        <div class="legend-item">
+                            <div class="legend-color not-vulnerable"></div>
+                            <span>Not at all vulnerable</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color minimal-vulnerability"></div>
+                            <span>Minimally vulnerable</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color somewhat-vulnerable"></div>
+                            <span>Moderately vulnerable</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color highly-vulnerable"></div>
+                            <span>Highly vulnerable</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color critical-concern"></div>
+                            <span>Extremely vulnerable</span>
+                        </div>
+                    </div>
+                    
+                    <div class="legend-consensus">
+                        <div class="legend-title">Expert Consensus Indicators:</div>
+                        <div class="legend-items">
+                            <div class="legend-item">
+                                <div class="consensus-dot consensus-high"></div>
+                                <span>Consensus</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="consensus-dot consensus-medium"></div>
+                                <span>Moderate agreement</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="consensus-dot consensus-low"></div>
+                                <span>Low agreement</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd;">
+                        <div class="legend-title">Response Distributions:</div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div class="mini-chart" style="margin: 0;">
+                                    <div class="mini-bar not-vulnerable" style="width: 10%;"></div>
+                                    <div class="mini-bar minimal-vulnerability" style="width: 15%;"></div>
+                                    <div class="mini-bar somewhat-vulnerable" style="width: 50%;"></div>
+                                    <div class="mini-bar highly-vulnerable" style="width: 20%;"></div>
+                                    <div class="mini-bar critical-concern" style="width: 5%;"></div>
+                                </div>
+                                <span style="font-size: 12px; color: #555;">Shows the spread of expert opinions across vulnerability levels. Wider spreads indicate disagreement; narrow peaks show consensus.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="overflow-x: auto; width: 100%;">
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th>RISK DOMAIN / SUBDOMAIN</th>
+                        <th class="sector-header" data-sector-index="0">Agriculture, Mining, Construction & Manufacturing</th>
+                        <th class="sector-header" data-sector-index="1">Trade, Transportation & Utilities</th>
+                        <th class="sector-header" data-sector-index="2">Information</th>
+                        <th class="sector-header" data-sector-index="3">Finance & Insurance</th>
+                        <th class="sector-header" data-sector-index="4">Real Estate, Rental & Leasing</th>
+                        <th class="sector-header" data-sector-index="5">Professional & Technical Services</th>
+                        <th class="sector-header" data-sector-index="6">Scientific Research & Development</th>
+                        <th class="sector-header" data-sector-index="7">Management & Support Services</th>
+                        <th class="sector-header" data-sector-index="8">Educational Services</th>
+                        <th class="sector-header" data-sector-index="9">Health Care & Social Assistance</th>
+                        <th class="sector-header" data-sector-index="10">Arts & Entertainment</th>
+                        <th class="sector-header" data-sector-index="11">Accommodation & Food Services</th>
+                        <th class="sector-header" data-sector-index="12">Public Administration</th>
+                        <th class="sector-header" data-sector-index="13">National Security</th>
+                    </tr>
+                </thead>
+                <tbody id="matrixBody">
+                    <!-- Content will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div style="background: #a31e38; padding: 20px; border-top: 2px solid #ddd; width: 100%; box-sizing: border-box;">
+            <p style="font-size: 14px; color: #fff; margin: 0; line-height: 1.6; font-weight: 600;">
+                Vulnerability is the <strong>exposure</strong> and <strong>sensitivity</strong> of an actor to a specific AI risk.
+            </p>
+            <ul style="font-size: 14px; color: #fff; margin: 8px 0 0 20px; line-height: 1.6;">
+                <li><strong>Exposure:</strong> The extent to which the actor's people, operations, and assets interact with or are dependent on AI systems.</li>
+                <li><strong>Sensitivity:</strong> The extent to which an actor would be harmed if the hazard materialized. The harm may be direct or indirect.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Modal for detailed view -->
+    <div id="detailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Risk Details</h2>
+                <p class="modal-subtitle" id="modalSubtitle">Sector Name</p>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Complete risk definitions
+        const riskDefinitions = {
+            '1.1': {
+                code: '1.1',
+                title: 'Unfair discrimination and misrepresentation',
+                definition: 'Unequal treatment of individuals or groups by AI, often based on race, gender, or other sensitive characteristics, resulting in unfair outcomes and representation of those groups.'
+            },
+            '1.2': {
+                code: '1.2',
+                title: 'Exposure to toxic content',
+                definition: 'AI exposing users to harmful, abusive, unsafe or inappropriate content.'
+            },
+            '1.3': {
+                code: '1.3',
+                title: 'Unequal performance across groups',
+                definition: 'Accuracy and effectiveness of AI decisions and actions is dependent on group membership.'
+            },
+            '2.1': {
+                code: '2.1',
+                title: 'Compromise of privacy',
+                definition: 'AI systems that memorize and leak sensitive personal data or infer private information about individuals without their consent.'
+            },
+            '2.2': {
+                code: '2.2',
+                title: 'AI system security vulnerabilities and attacks',
+                definition: 'Vulnerabilities in AI systems, software development toolchains, and hardware that can be exploited.'
+            },
+            '3.1': {
+                code: '3.1',
+                title: 'False or misleading information',
+                definition: 'AI systems that inadvertently generate or spread incorrect or deceptive information.'
+            },
+            '3.2': {
+                code: '3.2',
+                title: 'Pollution of information ecosystem',
+                definition: 'Highly personalized AI-generated misinformation creating filter bubbles.'
+            },
+            '4.1': {
+                code: '4.1',
+                title: 'Disinformation, surveillance, and influence at scale',
+                definition: 'Using AI systems to conduct large-scale disinformation campaigns, malicious surveillance, or targeted propaganda.'
+            },
+            '4.2': {
+                code: '4.2',
+                title: 'Cyberattacks, weapon development or use',
+                definition: 'Using AI systems to develop cyber weapons or enhance existing weapons.'
+            },
+            '4.3': {
+                code: '4.3',
+                title: 'Fraud, scams, and targeted manipulation',
+                definition: 'Using AI systems to gain a personal advantage over others through cheating, fraud, or scams.'
+            },
+            '5.1': {
+                code: '5.1',
+                title: 'Overreliance and unsafe use',
+                definition: 'Users anthropomorphizing, trusting, or relying on AI systems inappropriately.'
+            },
+            '5.2': {
+                code: '5.2',
+                title: 'Loss of human agency and autonomy',
+                definition: 'Humans delegating key decisions to AI systems, diminishing human control.'
+            },
+            '6.1': {
+                code: '6.1',
+                title: 'Power centralization',
+                definition: 'AI-driven concentration of power and resources within certain entities or groups.'
+            },
+            '6.2': {
+                code: '6.2',
+                title: 'Increased inequality and employment decline',
+                definition: 'Widespread use of AI increasing social and economic inequalities.'
+            },
+            '6.3': {
+                code: '6.3',
+                title: 'Economic and cultural devaluation',
+                definition: 'AI systems destabilizing economic and social systems that rely on human effort.'
+            },
+            '6.4': {
+                code: '6.4',
+                title: 'Competitive dynamics',
+                definition: 'AI developers competing in an AI race by rapidly developing and deploying systems.'
+            },
+            '6.5': {
+                code: '6.5',
+                title: 'Governance failure',
+                definition: 'Inadequate regulatory frameworks failing to keep pace with AI development.'
+            },
+            '6.6': {
+                code: '6.6',
+                title: 'Environmental harm',
+                definition: 'The development and operation of AI systems causing environmental harm.'
+            },
+            '7.1': {
+                code: '7.1',
+                title: 'AI pursuing conflicting goals',
+                definition: 'AI systems acting in conflict with human goals or values.'
+            },
+            '7.2': {
+                code: '7.2',
+                title: 'AI possessing dangerous capabilities',
+                definition: 'AI systems that develop or access capabilities that increase potential for harm.'
+            },
+            '7.3': {
+                code: '7.3',
+                title: 'Lack of capability or robustness',
+                definition: 'AI systems that fail to perform reliably under varying conditions.'
+            },
+            '7.4': {
+                code: '7.4',
+                title: 'Lack of transparency or interpretability',
+                definition: 'Challenges in understanding AI decision-making processes.'
+            },
+            '7.5': {
+                code: '7.5',
+                title: 'AI welfare and rights',
+                definition: 'Ethical considerations regarding the treatment of potentially sentient AI entities.'
+            },
+            '7.6': {
+                code: '7.6',
+                title: 'Multi-agent risks',
+                definition: 'Risks from multi-agent interactions and system structures.'
+            }
+        };
+
+        const sectorDefinitions = {
+            'Agriculture': {
+                name: 'Agriculture, Mining, Construction and Manufacturing',
+                description: 'Organizations that create, extract or construct physical products.'
+            },
+            'Trade Transportation': {
+                name: 'Trade, Transportation, and Utilities',
+                description: 'Organizations that trade or distribute goods and services.'
+            },
+            'Information': {
+                name: 'Information',
+                description: 'Organizations that produce or distribute information and culture.'
+            },
+            'Finance Insurance': {
+                name: 'Finance and Insurance',
+                description: 'Organizations that handle money and provide financial services.'
+            },
+            'Real Estate': {
+                name: 'Real Estate and Rental and Leasing',
+                description: 'Organizations that rent out property, equipment or other assets.'
+            },
+            'Professional Technical': {
+                name: 'Professional and Technical Services',
+                description: 'Organizations that provide specialized expertise and professional services.'
+            },
+            'Scientific Research': {
+                name: 'Scientific Research and Development Services',
+                description: 'Organizations that conduct research to discover new knowledge.'
+            },
+            'Management Support': {
+                name: 'Management, Administrative, and Support Services',
+                description: 'Organizations that provide support services or manage operations.'
+            },
+            'Educational': {
+                name: 'Educational Services',
+                description: 'Organizations that provide education, training, and instruction.'
+            },
+            'Health Care': {
+                name: 'Health Care and Social Assistance',
+                description: 'Organizations that provide medical care and social support.'
+            },
+            'Arts Entertainment': {
+                name: 'Arts, Entertainment, and Recreation',
+                description: 'Organizations that provide entertainment and recreational activities.'
+            },
+            'Accommodation Food': {
+                name: 'Accommodation, Food, and Other Services',
+                description: 'Organizations that provide places to stay, food and drinks.'
+            },
+            'Public Administration': {
+                name: 'Public Administration excluding National Security',
+                description: 'Government agencies that create laws and provide public services.'
+            },
+            'National Security': {
+                name: 'National Security',
+                description: 'Government establishments engaged in national security activities.'
+            }
+        };
+
+        // Store data and visibility
+        const cellData = {};
+        const expertCounts = {};
+        const visibleRisks = new Set();
+        const visibleSectors = new Set();
+
+        // Generate functions
+        function generateExpertCount(riskCode, sectorKey) {
+            const seed = (riskCode.charCodeAt(0) * 100 + riskCode.charCodeAt(2) * 10 + sectorKey.charCodeAt(0)) % 100;
+            if (seed < 15) return Math.floor(Math.random() * 5) + 3;
+            if (seed < 30) return Math.floor(Math.random() * 5) + 8;
+            if (seed < 60) return Math.floor(Math.random() * 8) + 12;
+            if (seed < 85) return Math.floor(Math.random() * 10) + 20;
+            return 30;
+        }
+
+        function generateDistribution(riskCode, sectorKey) {
+            const seed = riskCode.charCodeAt(0) * 100 + riskCode.charCodeAt(2) * 10 + sectorKey.charCodeAt(0) + sectorKey.charCodeAt(3);
+            const variation = (seed % 100) / 100;
+            
+            const patterns = [
+                [0, 0, 5, 15, 80],
+                [0, 5, 10, 20, 65],
+                [5, 10, 15, 45, 25],
+                [10, 20, 40, 25, 5],
+                [25, 45, 25, 5, 0],
+                [60, 30, 10, 0, 0],
+                [20, 20, 20, 20, 20]
+            ];
+            
+            const index = Math.floor(variation * patterns.length);
+            return patterns[index % patterns.length];
+        }
+
+        function getVulnerabilityLevel(distribution) {
+            const weights = [0, 1, 2, 3, 4];
+            let weightedSum = 0;
+            let totalResponses = 0;
+            
+            for (let i = 0; i < distribution.length; i++) {
+                weightedSum += distribution[i] * weights[i];
+                totalResponses += distribution[i];
+            }
+            
+            const average = weightedSum / totalResponses;
+            
+            if (average < 1) return { class: 'not-vulnerable', text: 'Not vulnerable' };
+            if (average < 1.5) return { class: 'minimal-vulnerability', text: 'Minimal' };
+            if (average < 2.5) return { class: 'somewhat-vulnerable', text: 'Moderate' };
+            if (average < 3.5) return { class: 'highly-vulnerable', text: 'High' };
+            return { class: 'critical-concern', text: 'Extreme' };
+        }
+
+        function getConsensusLevel(distribution) {
+            const maxValue = Math.max(...distribution);
+            if (maxValue >= 60) return 'consensus-high';
+            if (maxValue >= 40) return 'consensus-medium';
+            return 'consensus-low';
+        }
+
+        function createCell(sector, riskCode, distribution, sectorIndex) {
+            const vulnerability = getVulnerabilityLevel(distribution);
+            const consensus = getConsensusLevel(distribution);
+            const key = `${sector}_${riskCode}`;
+            
+            if (!expertCounts[key]) {
+                expertCounts[key] = generateExpertCount(riskCode, sector);
+            }
+            const expertCount = expertCounts[key];
+            
+            let evidenceQuality;
+            if (expertCount < 10) evidenceQuality = 'poor';
+            else if (expertCount < 20) evidenceQuality = 'moderate';
+            else evidenceQuality = 'good';
+            
+            let cellHTML = `
+                <td class="${vulnerability.class} clickable-cell" 
+                    data-sector="${sector}" 
+                    data-risk="${riskCode}"
+                    data-evidence="${evidenceQuality}"
+                    data-experts="${expertCount}"
+                    data-sector-index="${sectorIndex}">
+                    <div class="cell-consensus-dot ${consensus}"></div>
+                    ${vulnerability.text}
+                    <div class="mini-chart">`;
+            
+            const colors = ['not-vulnerable', 'minimal-vulnerability', 'somewhat-vulnerable', 'highly-vulnerable', 'critical-concern'];
+            for (let i = 0; i < distribution.length; i++) {
+                cellHTML += `<div class="mini-bar ${colors[i]}" style="width: ${distribution[i]}%;"></div>`;
+            }
+            
+            cellHTML += `
+                    </div>
+                </td>`;
+            
+            return cellHTML;
+        }
+
+        function createRow(riskCode, riskDef) {
+            const sectors = Object.keys(sectorDefinitions);
+            let rowHTML = `
+                <tr data-risk-code="${riskCode}" class="risk-row">
+                    <td class="risk-item-label">${riskDef.code} ${riskDef.title}</td>`;
+            
+            for (let i = 0; i < sectors.length; i++) {
+                const sectorKey = sectors[i];
+                const dataKey = `${sectorKey}_${riskCode}`;
+                let distribution = cellData[dataKey];
+                
+                if (!distribution) {
+                    distribution = generateDistribution(riskCode, sectorKey);
+                    cellData[dataKey] = distribution;
+                }
+                
+                rowHTML += createCell(sectorKey, riskCode, distribution, i);
+            }
+            
+            rowHTML += '</tr>';
+            return rowHTML;
+        }
+
+        function populateTable() {
+            const tbody = document.getElementById('matrixBody');
+            let tableHTML = '';
+            
+            const riskOrder = ['1.1', '1.2', '1.3', '2.1', '2.2', '3.1', '3.2', '4.1', '4.2', '4.3', 
+                              '5.1', '5.2', '6.1', '6.2', '6.3', '6.4', '6.5', '6.6', 
+                              '7.1', '7.2', '7.3', '7.4', '7.5', '7.6'];
+            
+            // Initialize all risks and sectors as visible
+            riskOrder.forEach(code => {
+                visibleRisks.add(code);
+            });
+            
+            const sectorKeys = Object.keys(sectorDefinitions);
+            sectorKeys.forEach((key, index) => {
+                visibleSectors.add(index);
+            });
+            
+            for (const code of riskOrder) {
+                if (riskDefinitions[code]) {
+                    tableHTML += createRow(code, riskDefinitions[code]);
+                }
+            }
+            
+            tbody.innerHTML = tableHTML;
+        }
+
+        function populateRiskDropdown() {
+            const dropdownContent = document.getElementById('riskDropdownContent');
+            const riskOrder = ['1.1', '1.2', '1.3', '2.1', '2.2', '3.1', '3.2', '4.1', '4.2', '4.3', 
+                              '5.1', '5.2', '6.1', '6.2', '6.3', '6.4', '6.5', '6.6', 
+                              '7.1', '7.2', '7.3', '7.4', '7.5', '7.6'];
+            
+            let dropdownHTML = '';
+            for (const code of riskOrder) {
+                if (riskDefinitions[code]) {
+                    const risk = riskDefinitions[code];
+                    dropdownHTML += `
+                        <div class="dropdown-item" onclick="toggleRisk('${code}')">
+                            <input type="checkbox" class="dropdown-checkbox" id="risk-${code}" checked onchange="toggleRisk('${code}')">
+                            <span class="item-code">${code}</span>
+                            <span class="item-title">${risk.title}</span>
+                        </div>
+                    `;
+                }
+            }
+            dropdownContent.innerHTML = dropdownHTML;
+        }
+
+        function populateSectorDropdown() {
+            const dropdownContent = document.getElementById('sectorDropdownContent');
+            const sectorKeys = Object.keys(sectorDefinitions);
+            
+            let dropdownHTML = '';
+            sectorKeys.forEach((key, index) => {
+                const sector = sectorDefinitions[key];
+                const shortName = sector.name.split(',')[0]; // Get first part before comma
+                dropdownHTML += `
+                    <div class="dropdown-item" onclick="toggleSector(${index})">
+                        <input type="checkbox" class="dropdown-checkbox" id="sector-${index}" checked onchange="toggleSector(${index})">
+                        <span class="item-code">${shortName}</span>
+                        <span class="item-title">${sector.name}</span>
+                    </div>
+                `;
+            });
+            dropdownContent.innerHTML = dropdownHTML;
+        }
+
+        function toggleRisk(riskCode) {
+            const checkbox = document.getElementById(`risk-${riskCode}`);
+            const row = document.querySelector(`tr[data-risk-code="${riskCode}"]`);
+            
+            if (checkbox.checked) {
+                visibleRisks.add(riskCode);
+                if (row) row.classList.remove('hidden-row');
+            } else {
+                visibleRisks.delete(riskCode);
+                if (row) row.classList.add('hidden-row');
+            }
+            
+            updateRiskDropdownText();
+        }
+
+        function updateRiskDropdownText() {
+            const totalRisks = Object.keys(riskDefinitions).length;
+            const visibleCount = visibleRisks.size;
+            const dropdownText = document.getElementById('riskDropdownText');
+            
+            if (visibleCount === totalRisks) {
+                dropdownText.textContent = 'All Risks Visible';
+            } else if (visibleCount === 0) {
+                dropdownText.textContent = 'All Risks Hidden';
+            } else {
+                dropdownText.textContent = `${visibleCount} of ${totalRisks} Risks Visible`;
+            }
+        }
+
+        function toggleSector(sectorIndex) {
+            const checkbox = document.getElementById(`sector-${sectorIndex}`);
+            const headerCell = document.querySelector(`th[data-sector-index="${sectorIndex}"]`);
+            const dataCells = document.querySelectorAll(`td[data-sector-index="${sectorIndex}"]`);
+            
+            if (checkbox.checked) {
+                visibleSectors.add(sectorIndex);
+                if (headerCell) headerCell.classList.remove('hidden-col');
+                dataCells.forEach(cell => cell.classList.remove('hidden-col'));
+            } else {
+                visibleSectors.delete(sectorIndex);
+                if (headerCell) headerCell.classList.add('hidden-col');
+                dataCells.forEach(cell => cell.classList.add('hidden-col'));
+            }
+            
+            updateSectorDropdownText();
+        }
+
+        function updateSectorDropdownText() {
+            const totalSectors = Object.keys(sectorDefinitions).length;
+            const visibleCount = visibleSectors.size;
+            const dropdownText = document.getElementById('sectorDropdownText');
+            
+            if (visibleCount === totalSectors) {
+                dropdownText.textContent = 'All Sectors Visible';
+            } else if (visibleCount === 0) {
+                dropdownText.textContent = 'All Sectors Hidden';
+            } else {
+                dropdownText.textContent = `${visibleCount} of ${totalSectors} Sectors Visible`;
+            }
+        }
+
+        // Initialize
+        populateTable();
+        populateRiskDropdown();
+        populateSectorDropdown();
+
+        // Dropdown functionality
+        const riskDropdownButton = document.getElementById('riskDropdownButton');
+        const riskDropdownContent = document.getElementById('riskDropdownContent');
+        const sectorDropdownButton = document.getElementById('sectorDropdownButton');
+        const sectorDropdownContent = document.getElementById('sectorDropdownContent');
+        
+        riskDropdownButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            riskDropdownContent.classList.toggle('show');
+            riskDropdownButton.classList.toggle('open');
+            // Close sector dropdown if open
+            sectorDropdownContent.classList.remove('show');
+            sectorDropdownButton.classList.remove('open');
+        });
+
+        sectorDropdownButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            sectorDropdownContent.classList.toggle('show');
+            sectorDropdownButton.classList.toggle('open');
+            // Close risk dropdown if open
+            riskDropdownContent.classList.remove('show');
+            riskDropdownButton.classList.remove('open');
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown-container')) {
+                riskDropdownContent.classList.remove('show');
+                riskDropdownButton.classList.remove('open');
+                sectorDropdownContent.classList.remove('show');
+                sectorDropdownButton.classList.remove('open');
+            }
+        });
+
+        // Prevent dropdowns from closing when clicking inside
+        riskDropdownContent.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        sectorDropdownContent.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        // Event listeners for existing functionality
+        document.getElementById('showDistributions').addEventListener('change', function() {
+            const charts = document.querySelectorAll('.matrix-table .mini-chart');
+            charts.forEach(chart => {
+                chart.style.display = this.checked ? 'flex' : 'none';
+            });
+        });
+
+        document.getElementById('showConsensus').addEventListener('change', function() {
+            const dots = document.querySelectorAll('.cell-consensus-dot');
+            dots.forEach(dot => {
+                dot.style.display = this.checked ? 'block' : 'none';
+            });
+        });
+
+        // Evidence quality filter
+        document.querySelectorAll('.evidenceFilter').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                updateEvidenceFilter();
+            });
+        });
+        
+        function updateEvidenceFilter() {
+            const checkedQualities = [];
+            document.querySelectorAll('.evidenceFilter:checked').forEach(cb => {
+                checkedQualities.push(cb.value);
+            });
+            
+            const cells = document.querySelectorAll('.clickable-cell');
+            cells.forEach(cell => {
+                const evidenceQuality = cell.getAttribute('data-evidence');
+                
+                if (checkedQualities.includes(evidenceQuality)) {
+                    if (cell.getAttribute('data-original-content')) {
+                        cell.innerHTML = cell.getAttribute('data-original-content');
+                    }
+                    if (cell.getAttribute('data-original-class')) {
+                        cell.className = cell.getAttribute('data-original-class');
+                    }
+                    cell.style.background = '';
+                    cell.style.visibility = 'visible';
+                    cell.style.pointerEvents = 'auto';
+                } else {
+                    if (!cell.getAttribute('data-original-content')) {
+                        cell.setAttribute('data-original-content', cell.innerHTML);
+                        cell.setAttribute('data-original-class', cell.className);
+                    }
+                    cell.innerHTML = '';
+                    cell.style.visibility = 'visible';
+                    cell.style.background = '#f0f0f0';
+                    cell.style.pointerEvents = 'none';
+                }
+            });
+        }
+        
+        // Store original content and classes on initialization
+        setTimeout(() => {
+            document.querySelectorAll('.clickable-cell').forEach(cell => {
+                cell.setAttribute('data-original-content', cell.innerHTML);
+                cell.setAttribute('data-original-class', cell.className);
+            });
+        }, 100);
+
+        // Modal functionality
+        const modal = document.getElementById('detailModal');
+        const closeBtn = document.querySelector('.close');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalSubtitle = document.getElementById('modalSubtitle');
+        const modalBody = document.getElementById('modalBody');
+        
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.clickable-cell')) {
+                const cell = e.target.closest('.clickable-cell');
+                const sector = cell.getAttribute('data-sector');
+                const riskCode = cell.getAttribute('data-risk');
+                
+                if (sector && riskCode && riskDefinitions[riskCode] && sectorDefinitions[sector]) {
+                    const riskDef = riskDefinitions[riskCode];
+                    const sectorDef = sectorDefinitions[sector];
+                    const key = `${sector}_${riskCode}`;
+                    const distribution = cellData[key] || [20, 20, 20, 20, 20];
+                    
+                    const labels = ['Not at all vulnerable', 'Minimally vulnerable', 'Moderately vulnerable', 'Highly vulnerable', 'Extremely vulnerable'];
+                    const colors = ['#0571b0', '#92c5de', '#f7f7f7', '#f4a582', '#ca0020'];
+                    
+                    // Calculate median
+                    let cumulative = 0;
+                    let median = 'Moderately vulnerable';
+                    let medianIndex = 2;
+                    for (let i = 0; i < labels.length; i++) {
+                        cumulative += distribution[i];
+                        if (cumulative >= 50) {
+                            median = labels[i];
+                            medianIndex = i;
+                            break;
+                        }
+                    }
+                    
+                    // Determine vulnerability and consensus
+                    let vulnClass, vulnLabel;
+                    if (medianIndex === 0) {
+                        vulnClass = 'vuln-not';
+                        vulnLabel = 'Not vulnerable';
+                    } else if (medianIndex === 1) {
+                        vulnClass = 'vuln-minimal';
+                        vulnLabel = 'Minimally vulnerable';
+                    } else if (medianIndex === 2) {
+                        vulnClass = 'vuln-moderate';
+                        vulnLabel = 'Moderately vulnerable';
+                    } else if (medianIndex === 3) {
+                        vulnClass = 'vuln-high';
+                        vulnLabel = 'Highly vulnerable';
+                    } else {
+                        vulnClass = 'vuln-extreme';
+                        vulnLabel = 'Extremely vulnerable';
+                    }
+                    
+                    const maxValue = Math.max(...distribution);
+                    let consensusClass, consensusLabel;
+                    if (maxValue >= 60) {
+                        consensusClass = 'consensus-high';
+                        consensusLabel = 'Consensus';
+                    } else if (maxValue >= 40) {
+                        consensusClass = 'consensus-medium';
+                        consensusLabel = 'Moderate agreement';
+                    } else {
+                        consensusClass = 'consensus-low';
+                        consensusLabel = 'Low agreement';
+                    }
+                    
+                    // Update modal
+                    modalTitle.innerHTML = `
+                        <div style="font-size: 13px; font-weight: 600; color: rgba(255, 255, 255, 0.9); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px;">
+                            Vulnerability* Assessment
+                        </div>
+                        <div style="border-bottom: 2px solid rgba(255, 255, 255, 0.3); margin-bottom: 16px;"></div>
+                        <div style="font-size: 22px; font-weight: 600;">
+                            ${sectorDef.name} × <span style="font-weight: 400;">${riskDef.title}</span>
+                        </div>
+                    `;
+                    modalSubtitle.innerHTML = ``;
+                    
+                    let bodyContent = `
+                        <div style="padding: 20px 30px 10px; background-color: #1a1a1a;">
+                            <div class="modal-indicators" style="display: flex; gap: 12px;">
+                                <div style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; background: rgba(100, 100, 100, 0.2); border-radius: 24px; font-size: 14px; font-weight: 600; color: #e0e0e0; border: 1px solid rgba(255, 255, 255, 0.2);">
+                                    <div style="width: 12px; height: 12px; border-radius: 50%; background-color: ${vulnClass === 'vuln-not' ? '#0571b0' : vulnClass === 'vuln-minimal' ? '#92c5de' : vulnClass === 'vuln-moderate' ? '#f7f7f7' : vulnClass === 'vuln-high' ? '#f4a582' : '#ca0020'}; border: 1px solid rgba(255, 255, 255, 0.5);"></div>
+                                    <span>${vulnLabel}</span>
+                                </div>
+                                <div style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; background: rgba(100, 100, 100, 0.2); border-radius: 24px; font-size: 14px; font-weight: 600; color: #e0e0e0; border: 1px solid rgba(255, 255, 255, 0.2);">
+                                    <div style="width: 12px; height: 12px; border-radius: 50%; background-color: ${consensusClass === 'consensus-high' ? '#2e7d32' : consensusClass === 'consensus-medium' ? '#f57c00' : '#d32f2f'}; border: 1px solid rgba(255, 255, 255, 0.5);"></div>
+                                    <span>${consensusLabel}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="expert-responses">
+                            <h3 class="section-title">Expert Response Distribution (n = 30)</h3>
+                            <div style="font-style: italic; font-size: 13px; color: #666; margin-bottom: 5px;">How vulnerable is the ${sectorDef.name.toLowerCase()} sector to ${riskDef.title.toLowerCase()}?</div>
+                            <div style="font-size: 13px; color: #666; margin-bottom: 20px; font-weight: 500;">Median response: ${median}</div>
+                            <div class="bar-chart">`;
+                    
+                    labels.forEach((label, i) => {
+                        const percentage = distribution[i];
+                        const count = Math.round(percentage / 3.33);
+                        const isNarrow = percentage <= 10 && percentage > 0;
+                        const isZero = percentage === 0;
+                        const isMedian = (i === medianIndex);
+                        
+                        bodyContent += `
+                            <div style="display: flex; align-items: center; margin-bottom: 8px; gap: 15px;">
+                                <div style="flex: 0 0 160px; font-size: 13px; color: #1a1a1a; font-weight: ${isMedian ? '600' : '400'};">${label}</div>
+                                <div style="flex: 1; position: relative; height: 28px; background: #e8e8e8; border-radius: 2px; overflow: visible; display: flex; align-items: center;">
+                                    <div style="height: 100%; width: ${Math.max(percentage, 2)}%; background-color: ${colors[i]}; border-radius: 2px; display: flex; align-items: center; justify-content: flex-end; padding-right: ${isNarrow || isZero ? '0' : '8px'}; ${isMedian ? 'outline: 3px solid #a31e38; outline-offset: -3px;' : ''}">
+                                        <span style="font-size: 12px; font-weight: 600; color: ${i === 2 ? '#333' : '#fff'}; ${isNarrow || isZero ? 'position: absolute; right: -28px; color: #666;' : ''}">${percentage}%</span>
+                                    </div>
+                                </div>
+                                <div style="flex: 0 0 80px; text-align: right; font-size: 12px; color: #666;">${count} experts</div>
+                            </div>`;
+                    });
+                    
+                    bodyContent += `
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 0; background-color: #1a1a1a; border-bottom: 1px solid #444;">
+                            <div style="flex: 1; padding: 20px 25px; border-right: 1px solid #444;">
+                                <h3 style="color: #fff; font-size: 14px; font-weight: 600; margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 0.5px;">Risk Definition</h3>
+                                <p style="color: #ccc; font-size: 14px; line-height: 1.6; margin: 0;">
+                                    <span style="color: #fff; font-weight: 600;">${riskDef.code} ${riskDef.title}:</span> ${riskDef.definition}
+                                </p>
+                            </div>
+                            <div style="flex: 1; padding: 20px 25px;">
+                                <h3 style="color: #fff; font-size: 14px; font-weight: 600; margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 0.5px;">Sector Definition</h3>
+                                <p style="color: #ccc; font-size: 14px; line-height: 1.6; margin: 0;">
+                                    <span style="color: #fff; font-weight: 600;">${sectorDef.name}:</span> ${sectorDef.description}
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #a31e38; padding: 20px 30px; margin: 0; border-radius: 0 0 8px 8px;">
+                            <p style="font-size: 13px; color: #fff; margin: 0 0 10px 0; font-weight: 600;">
+                                *Vulnerability Definition
+                            </p>
+                            <p style="font-size: 13px; color: rgba(255, 255, 255, 0.95); margin: 0 0 12px 0; line-height: 1.6;">
+                                Vulnerability is the <strong>exposure</strong> and <strong>sensitivity</strong> of an actor to a specific AI risk.
+                            </p>
+                            <ul style="font-size: 12px; color: rgba(255, 255, 255, 0.9); margin: 0 0 0 20px; padding: 0; line-height: 1.6; list-style-type: disc;">
+                                <li style="margin-bottom: 6px;"><strong style="color: #fff;">Exposure:</strong> The extent to which the actor's people, operations, and assets interact with or are dependent on AI systems.</li>
+                                <li><strong style="color: #fff;">Sensitivity:</strong> The extent to which an actor would be harmed if the hazard materialized. The harm may be direct or indirect.</li>
+                            </ul>
+                        </div>`;
+                    
+                    modalBody.innerHTML = bodyContent;
+                    modal.classList.add('show');
+                }
+            }
+        });
+        
+        closeBtn.addEventListener('click', function() {
+            modal.classList.remove('show');
+        });
+        
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.remove('show');
+            }
+        });
+
+        // Make functions globally accessible
+        window.toggleRisk = toggleRisk;
+        window.toggleSector = toggleSector;
+    </script>
+</body>
+</html>
+                

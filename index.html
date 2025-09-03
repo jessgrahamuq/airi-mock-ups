@@ -20,7 +20,7 @@
             background: white;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            max-width: 1800px;
+            max-width: 2400px;
             margin: 0 auto;
             overflow-x: auto;
             overflow-y: auto;
@@ -30,7 +30,7 @@
         .header {
             background: #a31e38;
             color: white;
-            padding: 15px 20px;
+            padding: 30px 35px;
             margin: 0;
             width: 100%;
             box-sizing: border-box;
@@ -42,14 +42,14 @@
         
         .header h1 {
             margin: 0;
-            font-size: 32px;
+            font-size: 58px;
             font-weight: bold;
             text-align: center;
             flex: 1;
         }
 
         .brand-logo {
-            height: 65px;
+            height: 95px;
             width: auto;
         }
 
@@ -79,15 +79,17 @@
         .dropdown-button {
             background: white;
             border: 2px solid #666;
-            border-radius: 6px;
-            padding: 8px 15px;
-            font-size: 13px;
+            border-radius: 8px;
+            padding: 24px 36px !important;
+            font-size: 26px !important;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
-            min-width: 200px;
+            gap: 15px;
+            min-width: 350px !important;
             transition: all 0.2s ease;
+            height: auto;
+            line-height: 1.4;
         }
 
         .dropdown-button:hover {
@@ -129,9 +131,9 @@
         }
 
         .dropdown-item {
-            padding: 10px 15px;
+            padding: 18px 25px !important;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 18px !important;
             border-bottom: 1px solid #f0f0f0;
             display: flex;
             align-items: center;
@@ -148,8 +150,8 @@
         }
 
         .dropdown-checkbox {
-            width: 14px;
-            height: 14px;
+            width: 18px;
+            height: 18px;
             cursor: pointer;
         }
 
@@ -167,7 +169,7 @@
         
         .legend {
             background: #f8f8f8;
-            padding: 15px 20px;
+            padding: 25px 30px;
             border-bottom: 1px solid #ddd;
             width: 100%;
             box-sizing: border-box;
@@ -184,14 +186,15 @@
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-size: 12px;
+            gap: 10px;
+            font-size: 24px !important;
+            padding: 5px 0;
         }
         
         .legend-color {
-            width: 16px;
-            height: 16px;
-            border-radius: 2px;
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
             border: 1px solid #333;
         }
         
@@ -203,8 +206,8 @@
         
         .legend-title {
             font-weight: 600;
-            margin-bottom: 5px;
-            font-size: 13px;
+            margin-bottom: 10px;
+            font-size: 24px !important;
         }
 
         .legend-consensus {
@@ -214,11 +217,11 @@
         }
 
         .consensus-dot {
-            width: 8px;
-            height: 8px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             display: inline-block;
-            margin-right: 5px;
+            margin-right: 10px;
         }
 
         .consensus-dot.consensus-high { background-color: #2e7d32; }
@@ -237,8 +240,16 @@
         .matrix-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 11px;
-            min-width: 1700px;
+            font-size: 14px;
+            min-width: 2300px;
+            margin: 30px 0;
+        }
+        
+        .table-wrapper {
+            padding: 30px;
+            background: #fafafa;
+            border-radius: 8px;
+            margin: 20px 0;
         }
         
         .matrix-table th,
@@ -249,6 +260,7 @@
             vertical-align: middle;
             height: 45px;
             position: relative;
+            font-size: 16px;
         }
 
         .matrix-table th:first-child,
@@ -256,11 +268,11 @@
             width: 320px;
             text-align: left;
             padding: 10px 12px;
-            font-size: 10px;
+            font-size: 16px;
         }
         
         .matrix-table td.risk-item-label {
-            font-size: 13px !important;
+            font-size: 16px !important;
         }
         
         .sector-header {
@@ -284,7 +296,7 @@
             background: #666;
             color: white;
             font-weight: 700;
-            font-size: 11px;
+            font-size: 14px;
             text-transform: uppercase;
         }
 
@@ -551,7 +563,7 @@
         <div class="legend">
             <div style="display: flex; justify-content: flex-start; align-items: flex-start; gap: 40px; flex-wrap: wrap;">
                 <div>
-                    <div style="font-size: 12px; font-weight: 600; color: #333; margin-bottom: 10px;">Show/Hide Risks:</div>
+                    <div style="font-size: 26px; font-weight: 600; color: #333; margin-bottom: 12px;">Show/Hide Risks:</div>
                     <div class="dropdown-container">
                         <div class="dropdown-button" id="riskDropdownButton">
                             <span id="riskDropdownText">All Risks Visible</span>
@@ -564,7 +576,7 @@
                 </div>
                 
                 <div>
-                    <div style="font-size: 12px; font-weight: 600; color: #333; margin-bottom: 10px;">Show/Hide Sectors:</div>
+                    <div style="font-size: 26px; font-weight: 600; color: #333; margin-bottom: 12px;">Show/Hide Sectors:</div>
                     <div class="dropdown-container">
                         <div class="dropdown-button" id="sectorDropdownButton">
                             <span id="sectorDropdownText">All Sectors Visible</span>
@@ -577,31 +589,31 @@
                 </div>
                 
                 <div>
-                    <div style="font-size: 12px; font-weight: 600; color: #333; margin-bottom: 10px;">Display Options:</div>
+                    <div style="font-size: 26px; font-weight: 600; color: #333; margin-bottom: 12px;">Display Options:</div>
                     <div style="display: flex; flex-direction: column; gap: 8px;">
-                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #555; cursor: pointer;">
-                            <input type="checkbox" id="showDistributions" checked style="cursor: pointer;">
+                        <label style="display: flex; align-items: center; gap: 10px; font-size: 24px; color: #555; cursor: pointer;">
+                            <input type="checkbox" id="showDistributions" style="cursor: pointer;">
                             <span>Show Response Distributions</span>
                         </label>
-                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #555; cursor: pointer;">
-                            <input type="checkbox" id="showConsensus" checked style="cursor: pointer;">
+                        <label style="display: flex; align-items: center; gap: 10px; font-size: 24px; color: #555; cursor: pointer;">
+                            <input type="checkbox" id="showConsensus" style="cursor: pointer;">
                             <span>Show Consensus Indicators</span>
                         </label>
                     </div>
                 </div>
                 
                 <div>
-                    <div style="font-size: 12px; font-weight: 600; color: #333; margin-bottom: 10px;">Evidence Quality Filter:</div>
+                    <div style="font-size: 26px; font-weight: 600; color: #333; margin-bottom: 12px;">Evidence Quality Filter:</div>
                     <div style="display: flex; flex-direction: column; gap: 6px;">
-                        <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #555; cursor: pointer;">
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 24px; color: #555; cursor: pointer;">
                             <input type="checkbox" class="evidenceFilter" value="poor" checked style="cursor: pointer;">
                             <span>Poor (n < 10)</span>
                         </label>
-                        <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #555; cursor: pointer;">
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 24px; color: #555; cursor: pointer;">
                             <input type="checkbox" class="evidenceFilter" value="moderate" checked style="cursor: pointer;">
                             <span>Moderate (10 ≤ n < 20)</span>
                         </label>
-                        <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #555; cursor: pointer;">
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 24px; color: #555; cursor: pointer;">
                             <input type="checkbox" class="evidenceFilter" value="good" checked style="cursor: pointer;">
                             <span>Good (n ≥ 20)</span>
                         </label>
@@ -611,6 +623,7 @@
         </div>
         
         <div style="overflow-x: auto; width: 100%;">
+        <div class="table-wrapper">
             <table class="matrix-table">
                 <thead>
                     <tr>
@@ -639,6 +652,7 @@
                     <!-- Content will be populated by JavaScript -->
                 </tbody>
             </table>
+        </div>
         </div>
         
         <!-- Legend Section -->
@@ -698,7 +712,7 @@
                                     <div class="mini-bar highly-vulnerable" style="width: 20%;"></div>
                                     <div class="mini-bar critical-concern" style="width: 5%;"></div>
                                 </div>
-                                <span style="font-size: 12px; color: #555;">Shows the spread of expert opinions across vulnerability levels. Wider spreads indicate disagreement; narrow peaks show consensus.</span>
+                                <span style="font-size: 22px; color: #555;">Shows the spread of expert opinions across vulnerability levels. Wider spreads indicate disagreement; narrow peaks show consensus.</span>
                             </div>
                         </div>
                     </div>
@@ -707,11 +721,11 @@
         </div>
         
         <!-- Footer -->
-        <div style="background: #a31e38; padding: 20px; border-top: 2px solid #ddd; width: 100%; box-sizing: border-box; text-align: center;">
-            <p style="font-size: 14px; color: #fff; margin: 0 0 8px 0; font-weight: 600;">
+        <div style="background: #a31e38; padding: 35px; border-top: 2px solid #ddd; width: 100%; box-sizing: border-box; text-align: center;">
+            <p style="font-size: 28px; color: #fff; margin: 0 0 15px 0; font-weight: 600;">
                 © MIT FutureTech 2025
             </p>
-            <p style="font-size: 12px; color: rgba(255, 255, 255, 0.9); margin: 0;">
+            <p style="font-size: 24px; color: rgba(255, 255, 255, 0.9); margin: 0;">
                 The MIT AI Risk Index is licensed under CC BY 4.0
             </p>
         </div>
@@ -1019,6 +1033,10 @@
             else if (expertCount < 20) evidenceQuality = 'moderate';
             else evidenceQuality = 'good';
             
+            // Check if distributions and consensus should be shown
+            const showDistributions = document.getElementById('showDistributions')?.checked || false;
+            const showConsensus = document.getElementById('showConsensus')?.checked || false;
+            
             let cellHTML = `
                 <td class="${vulnerability.class} clickable-cell" 
                     data-sector="${sector}" 
@@ -1026,18 +1044,19 @@
                     data-evidence="${evidenceQuality}"
                     data-experts="${expertCount}"
                     data-sector-index="${sectorIndex}">
-                    <div class="cell-consensus-dot ${consensus}"></div>
-                    ${vulnerability.text}
-                    <div class="mini-chart">`;
+                    ${showConsensus ? `<div class="cell-consensus-dot ${consensus}"></div>` : ''}
+                    <span style="font-size: 16px; font-weight: 600;">${vulnerability.text}</span>
+                    ${showDistributions ? '<div class="mini-chart">' : ''}`;
             
-            const colors = ['not-vulnerable', 'minimal-vulnerability', 'somewhat-vulnerable', 'highly-vulnerable', 'critical-concern'];
-            for (let i = 0; i < distribution.length; i++) {
-                cellHTML += `<div class="mini-bar ${colors[i]}" style="width: ${distribution[i]}%;"></div>`;
+            if (showDistributions) {
+                const colors = ['not-vulnerable', 'minimal-vulnerability', 'somewhat-vulnerable', 'highly-vulnerable', 'critical-concern'];
+                for (let i = 0; i < distribution.length; i++) {
+                    cellHTML += `<div class="mini-bar ${colors[i]}" style="width: ${distribution[i]}%;"></div>`;
+                }
+                cellHTML += '</div>';
             }
             
-            cellHTML += `
-                    </div>
-                </td>`;
+            cellHTML += '</td>';
             
             return cellHTML;
         }
@@ -1098,7 +1117,12 @@
                               '5.1', '5.2', '6.1', '6.2', '6.3', '6.4', '6.5', '6.6', 
                               '7.1', '7.2', '7.3', '7.4', '7.5', '7.6'];
             
-            let dropdownHTML = '';
+            let dropdownHTML = `
+                <div style="padding: 10px; border-bottom: 1px solid #ddd; display: flex; gap: 10px;">
+                    <button onclick="selectAllRisks()" style="padding: 8px 12px; font-size: 14px; border: 1px solid #ccc; background: #f5f5f5; cursor: pointer; border-radius: 3px;">Select All</button>
+                    <button onclick="deselectAllRisks()" style="padding: 8px 12px; font-size: 14px; border: 1px solid #ccc; background: #f5f5f5; cursor: pointer; border-radius: 3px;">Deselect All</button>
+                </div>
+            `;
             for (const code of riskOrder) {
                 if (riskDefinitions[code]) {
                     const risk = riskDefinitions[code];
@@ -1118,7 +1142,12 @@
             const dropdownContent = document.getElementById('sectorDropdownContent');
             const sectorKeys = Object.keys(sectorDefinitions);
             
-            let dropdownHTML = '';
+            let dropdownHTML = `
+                <div style="padding: 10px; border-bottom: 1px solid #ddd; display: flex; gap: 10px;">
+                    <button onclick="selectAllSectors()" style="padding: 8px 12px; font-size: 14px; border: 1px solid #ccc; background: #f5f5f5; cursor: pointer; border-radius: 3px;">Select All</button>
+                    <button onclick="deselectAllSectors()" style="padding: 8px 12px; font-size: 14px; border: 1px solid #ccc; background: #f5f5f5; cursor: pointer; border-radius: 3px;">Deselect All</button>
+                </div>
+            `;
             sectorKeys.forEach((key, index) => {
                 const sector = sectorDefinitions[key];
                 const shortName = sector.name.split(',')[0]; // Get first part before comma
@@ -1146,6 +1175,7 @@
             }
             
             updateRiskDropdownText();
+            resizeTable();
         }
 
         function updateRiskDropdownText() {
@@ -1178,6 +1208,7 @@
             }
             
             updateSectorDropdownText();
+            resizeTable();
         }
 
         function updateSectorDropdownText() {
@@ -1194,10 +1225,154 @@
             }
         }
 
+        function selectAllRisks() {
+            const riskOrder = ['1.1', '1.2', '1.3', '2.1', '2.2', '3.1', '3.2', '4.1', '4.2', '4.3', 
+                              '5.1', '5.2', '6.1', '6.2', '6.3', '6.4', '6.5', '6.6', 
+                              '7.1', '7.2', '7.3', '7.4', '7.5', '7.6'];
+            
+            for (const code of riskOrder) {
+                if (riskDefinitions[code]) {
+                    const checkbox = document.getElementById(`risk-${code}`);
+                    const row = document.querySelector(`tr[data-risk-code="${code}"]`);
+                    
+                    if (checkbox && !checkbox.checked) {
+                        checkbox.checked = true;
+                        visibleRisks.add(code);
+                        if (row) row.classList.remove('hidden-row');
+                    }
+                }
+            }
+            
+            updateRiskDropdownText();
+            resizeTable();
+        }
+
+        function deselectAllRisks() {
+            const riskOrder = ['1.1', '1.2', '1.3', '2.1', '2.2', '3.1', '3.2', '4.1', '4.2', '4.3', 
+                              '5.1', '5.2', '6.1', '6.2', '6.3', '6.4', '6.5', '6.6', 
+                              '7.1', '7.2', '7.3', '7.4', '7.5', '7.6'];
+            
+            for (const code of riskOrder) {
+                if (riskDefinitions[code]) {
+                    const checkbox = document.getElementById(`risk-${code}`);
+                    const row = document.querySelector(`tr[data-risk-code="${code}"]`);
+                    
+                    if (checkbox && checkbox.checked) {
+                        checkbox.checked = false;
+                        visibleRisks.delete(code);
+                        if (row) row.classList.add('hidden-row');
+                    }
+                }
+            }
+            
+            updateRiskDropdownText();
+            resizeTable();
+        }
+
+        function selectAllSectors() {
+            const totalSectors = Object.keys(sectorDefinitions).length;
+            
+            for (let i = 0; i < totalSectors; i++) {
+                const checkbox = document.getElementById(`sector-${i}`);
+                const headerCell = document.querySelector(`th[data-sector-index="${i}"]`);
+                const dataCells = document.querySelectorAll(`td[data-sector-index="${i}"]`);
+                
+                if (checkbox && !checkbox.checked) {
+                    checkbox.checked = true;
+                    visibleSectors.add(i);
+                    if (headerCell) headerCell.classList.remove('hidden-col');
+                    dataCells.forEach(cell => cell.classList.remove('hidden-col'));
+                }
+            }
+            
+            updateSectorDropdownText();
+            resizeTable();
+        }
+
+        function deselectAllSectors() {
+            const totalSectors = Object.keys(sectorDefinitions).length;
+            
+            for (let i = 0; i < totalSectors; i++) {
+                const checkbox = document.getElementById(`sector-${i}`);
+                const headerCell = document.querySelector(`th[data-sector-index="${i}"]`);
+                const dataCells = document.querySelectorAll(`td[data-sector-index="${i}"]`);
+                
+                if (checkbox && checkbox.checked) {
+                    checkbox.checked = false;
+                    visibleSectors.delete(i);
+                    if (headerCell) headerCell.classList.add('hidden-col');
+                    dataCells.forEach(cell => cell.classList.add('hidden-col'));
+                }
+            }
+            
+            updateSectorDropdownText();
+            resizeTable();
+        }
+
+        function resizeTable() {
+            const table = document.querySelector('.matrix-table');
+            if (!table) return;
+            
+            // Handle column resizing for sectors
+            const totalSectors = Object.keys(sectorDefinitions).length;
+            const visibleSectorCount = visibleSectors.size;
+            
+            // Set fixed width for risk name column
+            const riskColumnWidth = '250px'; // Fixed width for risk names
+            const riskColumn = document.querySelector('.matrix-table th:first-child');
+            const riskCells = document.querySelectorAll('.risk-item-label');
+            
+            if (riskColumn) riskColumn.style.width = riskColumnWidth;
+            riskCells.forEach(cell => cell.style.width = riskColumnWidth);
+            
+            if (visibleSectorCount > 0) {
+                // Calculate available width for sector columns (total - risk column width)
+                const availableWidth = `calc((100% - ${riskColumnWidth}) / ${visibleSectorCount})`;
+                
+                // Update all visible sector headers and cells
+                for (let i = 0; i < totalSectors; i++) {
+                    const headerCell = document.querySelector(`th[data-sector-index="${i}"]`);
+                    const dataCells = document.querySelectorAll(`td[data-sector-index="${i}"]`);
+                    
+                    if (visibleSectors.has(i)) {
+                        // Set width for visible columns
+                        if (headerCell) headerCell.style.width = availableWidth;
+                        dataCells.forEach(cell => cell.style.width = availableWidth);
+                    }
+                }
+            }
+            
+            // Handle row spacing for risks
+            const allRiskRows = document.querySelectorAll('.risk-row');
+            const visibleRiskRows = document.querySelectorAll('.risk-row:not(.hidden-row)');
+            const visibleRiskCount = visibleRiskRows.length;
+            
+            if (visibleRiskCount > 0) {
+                // Calculate available height and distribute among visible rows
+                const tableContainer = document.querySelector('.container');
+                const availableHeight = Math.max(400, window.innerHeight * 0.6); // Min 400px or 60% of viewport
+                const headerHeight = 100; // Approximate header height
+                const rowHeight = Math.max(40, (availableHeight - headerHeight) / visibleRiskCount); // Min 40px per row
+                
+                visibleRiskRows.forEach(row => {
+                    row.style.height = rowHeight + 'px';
+                });
+            }
+            
+            // Update table layout
+            table.style.tableLayout = 'fixed';
+            
+            // Force table reflow
+            table.style.display = 'none';
+            table.offsetHeight; // trigger reflow
+            table.style.display = '';
+        }
+
         // Initialize
         populateTable();
         populateRiskDropdown();
         populateSectorDropdown();
+        resizeTable();
 
         // Dropdown functionality
         const riskDropdownButton = document.getElementById('riskDropdownButton');
@@ -1244,17 +1419,11 @@
 
         // Event listeners for existing functionality
         document.getElementById('showDistributions').addEventListener('change', function() {
-            const charts = document.querySelectorAll('.matrix-table .mini-chart');
-            charts.forEach(chart => {
-                chart.style.display = this.checked ? 'flex' : 'none';
-            });
+            populateTable(); // Regenerate table with new settings
         });
 
         document.getElementById('showConsensus').addEventListener('change', function() {
-            const dots = document.querySelectorAll('.cell-consensus-dot');
-            dots.forEach(dot => {
-                dot.style.display = this.checked ? 'block' : 'none';
-            });
+            populateTable(); // Regenerate table with new settings
         });
 
         // Evidence quality filter
@@ -1977,6 +2146,10 @@
         window.toggleSector = toggleSector;
         window.openSectorModal = openSectorModal;
         window.openRiskModal = openRiskModal;
+        window.selectAllRisks = selectAllRisks;
+        window.deselectAllRisks = deselectAllRisks;
+        window.selectAllSectors = selectAllSectors;
+        window.deselectAllSectors = deselectAllSectors;
     </script>
 </body>
 </html>

@@ -42,7 +42,7 @@
         
         .header h1 {
             margin: 0;
-            font-size: 58px;
+            font-size: 50px;
             font-weight: bold;
             text-align: center;
             flex: 1;
@@ -200,7 +200,7 @@
         
         .legend-color.not-vulnerable { background-color: #0571b0; }
         .legend-color.minimal-vulnerability { background-color: #92c5de; }
-        .legend-color.somewhat-vulnerable { background-color: #f7f7f7; }
+        .legend-color.somewhat-vulnerable { background-color: #c8e6c8; }
         .legend-color.highly-vulnerable { background-color: #f4a582; }
         .legend-color.critical-concern { background-color: #ca0020; }
         
@@ -303,7 +303,7 @@
         /* Vulnerability cell styles */
         .not-vulnerable { background-color: #0571b0; color: white; }
         .minimal-vulnerability { background-color: #92c5de; color: black; }
-        .somewhat-vulnerable { background-color: #f7f7f7; color: black; }
+        .somewhat-vulnerable { background-color: #c8e6c8; color: black; }
         .highly-vulnerable { background-color: #f4a582; color: black; }
         .critical-concern { background-color: #ca0020; color: white; }
 
@@ -327,7 +327,7 @@
 
         .mini-bar.not-vulnerable { background-color: #0571b0; }
         .mini-bar.minimal-vulnerability { background-color: #92c5de; }
-        .mini-bar.somewhat-vulnerable { background-color: #f7f7f7; }
+        .mini-bar.somewhat-vulnerable { background-color: #c8e6c8; }
         .mini-bar.highly-vulnerable { background-color: #f4a582; }
         .mini-bar.critical-concern { background-color: #ca0020; }
 
@@ -606,11 +606,11 @@
                     <div style="font-size: 26px; font-weight: 600; color: #333; margin-bottom: 12px;">Evidence Quality Filter:</div>
                     <div style="display: flex; flex-direction: column; gap: 6px;">
                         <label style="display: flex; align-items: center; gap: 8px; font-size: 24px; color: #555; cursor: pointer;">
-                            <input type="checkbox" class="evidenceFilter" value="poor" checked style="cursor: pointer;">
+                            <input type="checkbox" class="evidenceFilter" value="poor" style="cursor: pointer;">
                             <span>Poor (n < 10)</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; font-size: 24px; color: #555; cursor: pointer;">
-                            <input type="checkbox" class="evidenceFilter" value="moderate" checked style="cursor: pointer;">
+                            <input type="checkbox" class="evidenceFilter" value="moderate" style="cursor: pointer;">
                             <span>Moderate (10 ≤ n < 20)</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; font-size: 24px; color: #555; cursor: pointer;">
@@ -1472,6 +1472,8 @@
                 cell.setAttribute('data-original-content', cell.innerHTML);
                 cell.setAttribute('data-original-class', cell.className);
             });
+            // Apply evidence filter on page load
+            updateEvidenceFilter();
         }, 100);
 
         // Modal functionality
@@ -1494,7 +1496,7 @@
                     const distribution = cellData[key] || [20, 20, 20, 20, 20];
                     
                     const labels = ['Not at all vulnerable', 'Minimally vulnerable', 'Moderately vulnerable', 'Highly vulnerable', 'Extremely vulnerable'];
-                    const colors = ['#0571b0', '#92c5de', '#f7f7f7', '#f4a582', '#ca0020'];
+                    const colors = ['#0571b0', '#92c5de', '#c8e6c8', '#f4a582', '#ca0020'];
                     
                     // Calculate median
                     let cumulative = 0;
@@ -1574,7 +1576,7 @@
                         <div style="padding: 20px 30px 10px; background-color: #1a1a1a;">
                             <div class="modal-indicators" style="display: flex; gap: 12px; flex-wrap: wrap;">
                                 <div style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; background: rgba(100, 100, 100, 0.2); border-radius: 24px; font-size: 14px; font-weight: 600; color: #e0e0e0; border: 1px solid rgba(255, 255, 255, 0.2);">
-                                    <div style="width: 12px; height: 12px; border-radius: 50%; background-color: ${vulnClass === 'vuln-not' ? '#0571b0' : vulnClass === 'vuln-minimal' ? '#92c5de' : vulnClass === 'vuln-moderate' ? '#f7f7f7' : vulnClass === 'vuln-high' ? '#f4a582' : '#ca0020'}; border: 1px solid rgba(255, 255, 255, 0.5);"></div>
+                                    <div style="width: 12px; height: 12px; border-radius: 50%; background-color: ${vulnClass === 'vuln-not' ? '#0571b0' : vulnClass === 'vuln-minimal' ? '#92c5de' : vulnClass === 'vuln-moderate' ? '#c8e6c8' : vulnClass === 'vuln-high' ? '#f4a582' : '#ca0020'}; border: 1px solid rgba(255, 255, 255, 0.5);"></div>
                                     <span>${vulnLabel}</span>
                                 </div>
                                 <div style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; background: rgba(100, 100, 100, 0.2); border-radius: 24px; font-size: 14px; font-weight: 600; color: #e0e0e0; border: 1px solid rgba(255, 255, 255, 0.2);">
@@ -1808,7 +1810,7 @@
             `;
 
             const vulnerabilityLevels = ['Not vulnerable', 'Minimal vulnerability', 'Somewhat vulnerable', 'Highly vulnerable', 'Critical concern'];
-            const colors = ['#0571b0', '#92c5de', '#f7f7f7', '#f4a582', '#ca0020'];
+            const colors = ['#0571b0', '#92c5de', '#c8e6c8', '#f4a582', '#ca0020'];
 
             vulnerabilityLevels.forEach((level, i) => {
                 bodyContent += `
@@ -1973,7 +1975,7 @@
             `;
 
             const vulnerabilityLevels = ['Not vulnerable', 'Minimal vulnerability', 'Somewhat vulnerable', 'Highly vulnerable', 'Critical concern'];
-            const colors = ['#0571b0', '#92c5de', '#f7f7f7', '#f4a582', '#ca0020'];
+            const colors = ['#0571b0', '#92c5de', '#c8e6c8', '#f4a582', '#ca0020'];
 
             vulnerabilityLevels.forEach((level, i) => {
                 bodyContent += `
